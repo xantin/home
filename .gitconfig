@@ -1,6 +1,7 @@
 [user]
-	email = david.dutkovsky@elnino.cz
-	name = David
+
+	email = david.dutkovsky@gmail.com
+	name = David Dutkovsky
 [alias]
 	co = checkout
 	ci = commit
@@ -14,6 +15,7 @@
 	lon = "log --oneline -n"
 	df = diff
 	s = show
+
 [push]
 	default = current
 [core]
