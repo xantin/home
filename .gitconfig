@@ -11,9 +11,9 @@
   	type = cat-file -t
   	dump = cat-file -p
 	lo = log --oneline
-	lo6 = log --oneline -n 6
 	lon = "log --oneline -n"
 	df = diff
+	df = diff --cached
 	s = show
 
 [push]
