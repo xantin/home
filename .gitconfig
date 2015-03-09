@@ -1,0 +1,23 @@
+[user]
+	email = david.dutkovsky@elnino.cz
+	name = David
+[alias]
+	co = checkout
+	ci = commit
+  	st = status
+  	br = branch
+  	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+  	type = cat-file -t
+  	dump = cat-file -p
+	lo = log --oneline
+	lo6 = log --oneline -n 6
+	lon = "log --oneline -n"
+	df = diff
+	s = show
+[push]
+	default = current
+[core]
+	eol = lf
+	autocrlf = input
+[merge]
+	ff = only
