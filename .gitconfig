@@ -13,7 +13,7 @@
 	lo = log --oneline
 	lon = "log --oneline -n"
 	df = diff
-	df = diff --cached
+	dfc = diff --cached
 	s = show
 
 [push]
