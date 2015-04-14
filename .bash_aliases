@@ -18,3 +18,8 @@ fi
 ##################################################
 
 alias ll='ls -alF'
+alias gitf='git flow'
+alias gitff='git flow feature'
+alias chals='sudo nano ~/.bash_aliases'
+alias vags='vagrant ssh'
+alias vu='vagrant up'
