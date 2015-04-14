@@ -15,7 +15,7 @@
 	df = diff
 	dfc = diff --cached
 	s = show
-
+	fic = 'diff-tree --no-commit-id --name-only -r'
 [push]
 	default = current
 [core]
@@ -23,3 +23,7 @@
 	autocrlf = input
 [merge]
 	ff = only
+	tool = kdiff3
+	tool = kdiff3git
+[color]
+	ui = auto
