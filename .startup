@@ -1,0 +1,36 @@
+#!/bin/bash
+
+LOG_FILE=$0.log
+
+# Wait for slower daemons
+sleep 1m
+
+# Clear log
+# TODO if $LOG_FILE is longer than 1 MB
+# TODO then
+# TODO      if exists backup copy
+# TODO      then
+# TODO           remove backup copy
+# TODO      fi
+# TODO      create new backup copy
+# TODO      remove log file
+# TODO fi
+rm $LOG_FILE
+
+# Write date
+date >>$LOG_FILE
+
+# Write blank line
+echo "">>$LOG_FILE
+
+# Restart CrashPlan service
+sudo service crashplan stop  >>$LOG_FILE
+sudo service crashplan start >>$LOG_FILE
+
+# Allow use up to 85 % of RAM
+sudo sysctl vm.swappiness=15 >>$LOG_FILE
+
+# Write 3 blank lines
+echo "">>$LOG_FILE
+echo "">>$LOG_FILE
+echo "">>$LOG_FILE
