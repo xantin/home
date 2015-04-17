@@ -30,6 +30,14 @@ sudo service crashplan start >>$LOG_FILE
 # Allow use up to 85 % of RAM
 sudo sysctl vm.swappiness=15 >>$LOG_FILE
 
+# Self-update
+if [ "$1" != "--no-update" ]
+then
+    git stash     >>$LOG_FILE
+    git pull      >>$LOG_FILE
+    git stash pop >>$LOG_FILE
+fi
+
 # Write 3 blank lines
 echo "">>$LOG_FILE
 echo "">>$LOG_FILE
