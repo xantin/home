@@ -18,27 +18,29 @@ sleep 1m
 rm $LOG_FILE
 
 # Write date
-date >>$LOG_FILE
+date &>>"$LOG_FILE"
 
 # Write blank line
-echo "">>$LOG_FILE
+echo "" &>>"$LOG_FILE"
 
 # Restart CrashPlan service
-sudo service crashplan stop  >>$LOG_FILE
-sudo service crashplan start >>$LOG_FILE
+sudo service crashplan stop  &>>"$LOG_FILE"
+sudo service crashplan start &>>"$LOG_FILE"
 
 # Allow use up to 85 % of RAM
-sudo sysctl vm.swappiness=15 >>$LOG_FILE
+sudo sysctl vm.swappiness=15 &>>"$LOG_FILE"
 
 # Self-update
 if [ "$1" != "--no-update" ]
 then
-    git stash     >>$LOG_FILE
-    git pull      >>$LOG_FILE
-    git stash pop >>$LOG_FILE
+    git stash     &>>"$LOG_FILE"
+    git pull      &>>"$LOG_FILE"
+    git stash pop &>>"$LOG_FILE"
+else
+    echo "Self-update disabled by user" &>>"$LOG_FILE"
 fi
 
 # Write 3 blank lines
-echo "">>$LOG_FILE
-echo "">>$LOG_FILE
-echo "">>$LOG_FILE
+echo "" &>>"$LOG_FILE"
+echo "" &>>"$LOG_FILE"
+echo "" &>>"$LOG_FILE"
