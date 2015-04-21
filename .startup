@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOG_FILE=$0.log
+LOG_FILE="$(cd $(dirname "$0"); pwd)/$(basename "$0").log"
 
 # Wait for slower daemons
 sleep 1m
@@ -33,9 +33,12 @@ sudo sysctl vm.swappiness=15 &>>"$LOG_FILE"
 # Self-update
 if [ "$1" != "--no-update" ]
 then
+(
+    cd $(dirname "$0")
     git stash     &>>"$LOG_FILE"
     git pull      &>>"$LOG_FILE"
     git stash pop &>>"$LOG_FILE"
+)
 else
     echo "Self-update disabled by user" &>>"$LOG_FILE"
 fi
