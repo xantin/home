@@ -28,6 +28,8 @@ git() {
         command echo "Macro extension:"
         command echo "   git mpull [<directory>]"
         command echo "      Pulls all git repositories in directory and subdirectories."
+        command echo "   git branch --clear <branch>"
+        command echo "      Locally deletes branches whichs are merged into <branch>."
     elif [ "$1" == "mpull" ] && [ "$2" != "" ]
     then
     (
@@ -51,6 +53,19 @@ git() {
             fi
         )
         done
+    elif [ "$1" == "branch" ] && [ "$2" == "--clear" ]
+    then
+        if [ "$3" == "" ]
+        then
+            command echo "ERROR!"
+            command echo "    You must specify branch as 3rd parameter."
+        else
+            MERGED_TO="$3"
+            for MERGED_BRANCH in `command git branch --merged "$MERGED_TO" | grep -v "$MERGED_TO" | grep -v "master"`
+            do
+                command git branch --delete "$MERGED_BRANCH"
+            done
+        fi
     else
         command git "$@"
     fi
