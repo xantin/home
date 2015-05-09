@@ -2,7 +2,7 @@
 
 if [ "$1" != "--run-directly" ] && [ "$2" != "--run-directly" ]
 then
-    TMP_FILE=/tmp/.startup
+    TMP_FILE="$0.tmp"
     cat $0 > $TMP_FILE
     bash $TMP_FILE "--run-directly"
     rm $TMP_FILE
