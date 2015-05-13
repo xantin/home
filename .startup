@@ -1,5 +1,14 @@
 #!/bin/bash
 
+if [ "$1" != "--run-directly" ] && [ "$2" != "--run-directly" ]
+then
+    TMP_FILE="$0.tmp"
+    cat $0 > $TMP_FILE
+    bash $TMP_FILE "--run-directly"
+    rm $TMP_FILE
+    exit
+fi
+
 LOG_FILE="$(cd $(dirname "$0"); pwd)/$(basename "$0").log"
 
 # Wait for slower daemons
@@ -37,7 +46,7 @@ sudo service crashplan start &>>"$LOG_FILE"
 sudo sysctl vm.swappiness=15 &>>"$LOG_FILE"
 
 # Self-update
-if [ "$1" != "--no-update" ]
+if [ "$1" != "--no-update" ] && [ "$2" != "--no-update" ]
 then
 (
     cd $(dirname "$0")
