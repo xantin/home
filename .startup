@@ -45,6 +45,9 @@ sudo service crashplan start &>>"$LOG_FILE"
 # Allow use up to 85 % of RAM
 sudo sysctl vm.swappiness=15 &>>"$LOG_FILE"
 
+# Allow unencrypted VNC remote connection
+gsettings set org.gnome.Vino require-encryption false &>>"$LOG_FILE"
+
 # Self-update
 if [ "$1" != "--no-update" ] && [ "$2" != "--no-update" ]
 then
