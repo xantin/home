@@ -1,15 +1,21 @@
 #!/bin/bash
 
+# How to install
+#
+#   1. Run sudo crontab -e
+#   2. Add this line at the end of file:
+#       @reboot bash /home/{username}/.startup
+
 if [ "$1" != "--run-directly" ] && [ "$2" != "--run-directly" ]
 then
     TMP_FILE="$0.tmp"
     cat $0 > $TMP_FILE
-    bash $TMP_FILE "--run-directly"
+    bash $TMP_FILE "--run-directly" "$1" "$2"
     rm $TMP_FILE
     exit
 fi
 
-LOG_FILE="$(cd $(dirname "$0"); pwd)/$(basename "$0").log"
+LOG_FILE="$(cd $(dirname "$0"); pwd)/$(basename "$0" ".tmp").log"
 
 # Wait for slower daemons
 sleep 1m
@@ -49,7 +55,7 @@ sudo sysctl vm.swappiness=15 &>>"$LOG_FILE"
 gsettings set org.gnome.Vino require-encryption false &>>"$LOG_FILE"
 
 # Self-update
-if [ "$1" != "--no-update" ] && [ "$2" != "--no-update" ]
+if [ "$1" != "--no-update" ] && [ "$2" != "--no-update" ] && [ "$3" != "--no-update" ]
 then
 (
     cd $(dirname "$0")
