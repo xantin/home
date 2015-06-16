@@ -26,6 +26,8 @@ git() {
         command git "$@"
         command echo ""
         command echo "Macro extension:"
+        command echo "   git multi <command> [<parameters>]"
+        command echo "      Runs command in all git repositories in directory and subdirectories."
         command echo "   git mpull [<directory>]"
         command echo "      Pulls all git repositories in directory and subdirectories."
         command echo "   git branch --clear <branch>"
@@ -38,10 +40,13 @@ git() {
     )
     elif [ "$1" == "mpull" ]
     then
+        git "multi" "pull" "--ff-only"
+    elif [ "$1" == "multi" ]
+    then
         if [ -d "./.git" ]
         then
             command echo "Opening $PWD"
-            command git pull --ff-only
+            command git "$2" "$3"
         fi
         for D in `find . -maxdepth 1 -type d`
         do
@@ -49,7 +54,7 @@ git() {
             if [ "$D" != "." ]
             then
                 command cd "$D"
-                git "mpull"
+                git "multi" "$2" "$3"
             fi
         )
         done
