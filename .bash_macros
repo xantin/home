@@ -63,7 +63,8 @@ git() {
         if [ -d "./.git" ]
         then
             command echo "Opening $PWD"
-            command git "$2" "$3"
+            shift
+            git "$@"
         fi
         for D in `find . -maxdepth 1 -type d`
         do
