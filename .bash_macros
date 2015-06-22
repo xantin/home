@@ -51,10 +51,11 @@ git() {
         for D in `find . -maxdepth 1 -type d`
         do
         (
-            if [ "$D" != "." ]
+            if [ "$D" != "." ] && [ "$D" != ".git" ]
             then
                 command cd "$D"
-                git "multi" "$2" "$3"
+                shift
+                git "multi" "$@"
             fi
         )
         done
