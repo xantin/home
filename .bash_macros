@@ -28,10 +28,27 @@ git() {
         command echo "Macro extension:"
         command echo "   git multi <command> [<parameters>]"
         command echo "      Runs command in all git repositories in directory and subdirectories."
+        command echo "   git mcheckout <branch> [<directory>]"
+        command echo "      Checkouts all git repositories in directory and subdirectories to <branch>."
         command echo "   git mpull [<directory>]"
         command echo "      Pulls all git repositories in directory and subdirectories."
         command echo "   git branch --clear <branch>"
         command echo "      Locally deletes branches which are merged to <branch>."
+    elif [ "$1" == "mcheckout" ] && [ "$3" != "" ]
+    then
+    (
+        command cd "$3"
+        git "mcheckout" "$2"
+    )
+    elif [ "$1" == "mcheckout" ]
+    then
+        if [ "$2" == "" ]
+        then
+            command echo "ERROR!"
+            command echo "    You must specify branch as 2nd parameter."
+        else
+            git "multi" "checkout" "$2"
+        fi
     elif [ "$1" == "mpull" ] && [ "$2" != "" ]
     then
     (
