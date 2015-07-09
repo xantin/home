@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# How to install
+#
+#   1. Run sudo crontab -e
+#   2. Add this line at the end of file:
+#       @reboot bash /home/{username}/.startup
+
+if [ "$1" != "--run-directly" ] && [ "$2" != "--run-directly" ]
+then
+    TMP_FILE="$0.tmp"
+    cat $0 > $TMP_FILE
+    bash $TMP_FILE "--run-directly" "$1" "$2"
+    rm $TMP_FILE
+    exit
+fi
+
+LOG_FILE="$(cd $(dirname "$0"); pwd)/$(basename "$0" ".tmp").log"
+
+# Wait for slower daemons
+sleep 1m
+
+# Clear log
+if [ -e $LOG_FILE ]
+then
+    LOG_SIZE=$(du -k "$LOG_FILE" | cut -f 1)
+    if [ $LOG_SIZE -gt 1024 ] # $LOG_SIZE > 1 MB
+    then
+        cat "$LOG_FILE" &>"$LOG_FILE.backup"
+        tail --lines=9999999 "$LOG_FILE.backup" | cat &>>"$LOG_FILE.backup"
+        rm "$LOG_FILE"
+        echo "Log file for $0" &>>"$LOG_FILE"
+        echo "    * previous version was backed up in $LOG_FILE.backup" &>>"$LOG_FILE"
+        echo "" &>>"$LOG_FILE"
+    fi
+else
+    echo "Log file for $0" &>>"$LOG_FILE"
+    echo "" &>>"$LOG_FILE"
+fi
+
+# Write date
+date &>>"$LOG_FILE"
+
+# Write blank line
+echo "" &>>"$LOG_FILE"
+
+# Restart CrashPlan service
+sudo service crashplan stop  &>>"$LOG_FILE"
+sudo service crashplan start &>>"$LOG_FILE"
+
+# Allow use up to 85 % of RAM
+sudo sysctl vm.swappiness=15 &>>"$LOG_FILE"
+
+# Allow unencrypted VNC remote connection
+gsettings set org.gnome.Vino require-encryption false &>>"$LOG_FILE"
+
+# Self-update
+if [ "$1" != "--no-update" ] && [ "$2" != "--no-update" ] && [ "$3" != "--no-update" ]
+then
+(
+    cd $(dirname "$0")
+    git stash     &>>"$LOG_FILE"
+    git pull      &>>"$LOG_FILE"
+    git stash pop &>>"$LOG_FILE"
+)
+else
+    echo "Self-update disabled by user" &>>"$LOG_FILE"
+fi
+
+# Write 3 blank lines
+echo "" &>>"$LOG_FILE"
+echo "" &>>"$LOG_FILE"
+echo "" &>>"$LOG_FILE"

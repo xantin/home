@@ -9,6 +9,10 @@ vagrant() {
     then
         command vagrant "up"
         command vagrant "ssh"
+    elif [ "$1" == "reboot" ]
+    then
+        vagrant "halt"
+        vagrant "up"
     else
         command vagrant "$@"
     fi
@@ -22,8 +26,29 @@ git() {
         command git "$@"
         command echo ""
         command echo "Macro extension:"
+        command echo "   git multi <command> [<parameters>]"
+        command echo "      Runs command in all git repositories in directory and subdirectories."
+        command echo "   git mcheckout <branch> [<directory>]"
+        command echo "      Checkouts all git repositories in directory and subdirectories to <branch>."
         command echo "   git mpull [<directory>]"
         command echo "      Pulls all git repositories in directory and subdirectories."
+        command echo "   git branch --clear <branch>"
+        command echo "      Locally deletes branches which are merged to <branch>."
+    elif [ "$1" == "mcheckout" ] && [ "$3" != "" ]
+    then
+    (
+        command cd "$3"
+        git "mcheckout" "$2"
+    )
+    elif [ "$1" == "mcheckout" ]
+    then
+        if [ "$2" == "" ]
+        then
+            command echo "ERROR!"
+            command echo "    You must specify branch as 2nd parameter."
+        else
+            git "multi" "checkout" "$2"
+        fi
     elif [ "$1" == "mpull" ] && [ "$2" != "" ]
     then
     (
@@ -32,21 +57,43 @@ git() {
     )
     elif [ "$1" == "mpull" ]
     then
+        git "multi" "pull" "--ff-only"
+    elif [ "$1" == "multi" ]
+    then
         if [ -d "./.git" ]
         then
             command echo "Opening $PWD"
-            command git pull
+            shift
+            git "$@"
         fi
         for D in `find . -maxdepth 1 -type d`
         do
         (
-            if [ "$D" != "." ]
+            if [ "$D" != "." ] && [ "$D" != ".git" ]
             then
                 command cd "$D"
-                git "mpull"
+                shift
+                git "multi" "$@"
             fi
         )
         done
+    elif [ "$1" == "branch" ] && [ "$2" == "--clear" ]
+    then
+        if [ "$3" == "" ]
+        then
+            command echo "ERROR!"
+            command echo "    You must specify branch as 3rd parameter."
+        else
+            MERGED_TO="$3"
+            for MERGED_BRANCH in `command git branch --merged "$MERGED_TO" | grep -v "$MERGED_TO" | grep -v "master" | grep -v "*"`
+            do
+                read -p "Are you sure you would like to delete $MERGED_BRANCH merged to $MERGED_TO? [Y/n] " CHOICE
+                if [ "$CHOICE" == "Y" ] || [ "$CHOICE" == "y" ] || [ "$CHOICE" == "" ]
+                then
+                    command git branch --delete "$MERGED_BRANCH"
+                fi
+            done
+        fi
     else
         command git "$@"
     fi
@@ -56,7 +103,12 @@ git() {
 
 phpunit() {
     command echo "Opening $PWD"
-    if [ -d "./module" ]
+    if [ -e "phpunit.xml" ]
+    then
+    (
+        command phpunit "$@"
+    )
+    elif [ -d "./module" ]
     then
     (
         command cd "./module"
@@ -84,6 +136,36 @@ phpunit() {
         else
              command phpunit "$@"
         fi
+    fi
+}
+
+
+
+composer() {
+    if [ "$1" == "help" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]
+    then
+        command composer "$@"
+        command echo ""
+        command echo "Macro extension:"
+        command echo "   composer rollback"
+        command echo "      Rollbacks last update and restores previous state."
+    elif [ "$1" == "update" ]
+    then
+        command cat "./composer.lock" > "./.composer.lock"
+        command composer "$@"
+    elif [ "$1" == "rollback" ]
+    then
+        if [ -e "./.composer.lock" ]
+        then
+            command cat "./.composer.lock" > "./composer.lock"
+            command rm "./.composer.lock"
+            command composer "install"
+        else
+            command echo "ERROR!"
+            command echo "    Backup of composer.lock not found."
+        fi
+    else
+        command composer "$@"
     fi
 }
 
