@@ -17,6 +17,7 @@ fi
 #   Your aliases                                 #
 ##################################################
 
+alias puf='phpunit --filter='
 alias ll='ls -alF'
 alias gitf='git flow'
 alias gitff='git flow feature'
