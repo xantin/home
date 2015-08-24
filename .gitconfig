@@ -4,7 +4,7 @@
 	name = David Dutkovsky
 [alias]
 	co = checkout
-	ci = commit
+	c = commit
   	st = status
   	br = branch
   	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
@@ -23,3 +23,5 @@
 	autocrlf = input
 [merge]
 	ff = only
+[difftool "sourcetree"]
+	cmd = 'C:/david/programs/KDiff3/kdiff3.exe' \"$LOCAL\" \"$REMOTE\"
