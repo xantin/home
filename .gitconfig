@@ -15,6 +15,7 @@
 	df = diff
 	dfc = diff --cached
 	s = show
+        open = reset --soft HEAD~1
 
 [push]
 	default = current
