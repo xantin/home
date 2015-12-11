@@ -16,6 +16,21 @@
 	dfc = diff --cached
 	s = show
         open = reset --soft HEAD~1
+	ffs = flow feature start
+	fff = flow feature finish
+	fi = flow init
+	# from ondra kopal
+	sp = "stash show stash@{0} -p"
+    	ss = "!f(){ git stash show -p stash@{${1}}; };f"
+    	sl = stash list
+	ls = log --pretty=format:'%C(green)%h%Creset - %s%C(yellow)%d%Creset%n          %aD (%ar %C(red)- %an%Creset)' --graph --color
+    	ll = log --pretty=format:'%C(green)%h%Creset - %s%C(yellow)%d%Creset%n          %aD (%ar %C(red)- %an%Creset)' --graph --color --all
+    	wc = whatchanged -p --pretty=format:'%C(red)%h %Creset%s%n%C(yellow)%an <%ae> %C(green)(%ar)%Creset'
+    	bl = blame
+    	uiu = update-index --assume-unchanged # untrack file
+    	uit = update-index --no-assume-unchanged # track file
+    	ctags = "!f(){ ./.git/hooks/ctags; };f"
+    	unstash = stash pop
 
 [push]
 	default = current
@@ -26,3 +41,5 @@
 	ff = only
 [difftool "sourcetree"]
 	cmd = 'C:/david/programs/KDiff3/kdiff3.exe' \"$LOCAL\" \"$REMOTE\"
+[grep]
+    lineNumber = true
