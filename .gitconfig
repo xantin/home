@@ -3,6 +3,8 @@
 	email = david.dutkovsky@gmail.com
 	name = David Dutkovsky
 [alias]
+	p = push
+	fp = push -f # use carefully!
 	co = checkout
 	c = commit
   	st = status
@@ -43,3 +45,6 @@
 	cmd = 'C:/david/programs/KDiff3/kdiff3.exe' \"$LOCAL\" \"$REMOTE\"
 [grep]
     lineNumber = true
+[commit]
+	global = C:/Users/xantin/git/commit-template.txt
+	template = C:/Users/xantin/git/commit-template.txt
