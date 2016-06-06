@@ -21,6 +21,7 @@
 	ffs = flow feature start
 	fff = flow feature finish
 	fi = flow init
+	radd  = "!ra(){ git remote add ${1} ${2}; };ra"
 	# from ondra kopal
 	sp = "stash show stash@{0} -p"
     	ss = "!f(){ git stash show -p stash@{${1}}; };f"
