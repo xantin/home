@@ -3,6 +3,7 @@
 	email = david.dutkovsky@gmail.com
 	name = David Dutkovsky
 [alias]
+	aliases = !git config --list | grep ^alias\\. | cut -c 7- | grep -Ei --color \"$1\" "#"
 	p = push
 	fp = push -f # use carefully!
 	co = checkout
