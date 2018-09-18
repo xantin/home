@@ -27,6 +27,3 @@
 	ff = only
 [color]
 	ui = auto
-[difftool "sourcetree"]
-	cmd = 'C:/david/programs/KDiff3/kdiff3.exe' \"$LOCAL\" \"$REMOTE\"
-
